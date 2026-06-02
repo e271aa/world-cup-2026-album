@@ -1098,6 +1098,16 @@
             const wrap = document.createElement('div');
             ensureDataIntegrity();
 
+            // Auto-correção: se a vista "Só selecionados" ficou sem itens (ex: após
+            // guardar ou limpar a troca), o botão para a desativar deixa de existir.
+            // Repõe o filtro para "todos" para não ficar preso numa grelha vazia.
+            if (trocasFilter.giveGrupo === '__selected__' && data.trades.pending.given.length === 0) {
+                trocasFilter.giveGrupo = 'todos';
+            }
+            if (trocasFilter.receiveGrupo === '__selected__' && data.trades.pending.received.length === 0) {
+                trocasFilter.receiveGrupo = 'todos';
+            }
+
             const container = document.createElement('div');
             const selectionDiv = document.createElement('div');
             selectionDiv.className = 'trades-container';
