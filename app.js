@@ -851,6 +851,18 @@
 
         // ============ TROCAS (TRADES) ============
         let trocasFilter = { giveGrupo: 'todos', receiveGrupo: 'todos', sort: 'az', giveSearch: '', receiveSearch: '' };
+        let trocasMobileSide = 'give'; // lado visível no telemóvel: 'give' ou 'receive'
+
+        function setTrocasSide(side) {
+            trocasMobileSide = side;
+            refreshTrocasPanel();
+        }
+
+        // Faz scroll suave para o topo do separador Trocas (usado após guardar/limpar).
+        function scrollTrocasTop() {
+            const panel = document.querySelector('[data-panel="Trocas"]');
+            if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
 
         function setTrocasFilter(key, value) {
             trocasFilter[key] = value;
@@ -1110,7 +1122,7 @@
 
             const container = document.createElement('div');
             const selectionDiv = document.createElement('div');
-            selectionDiv.className = 'trades-container';
+            selectionDiv.className = `trades-container show-${trocasMobileSide}`;
 
             const grupos = Object.keys(GROUPS).filter(g => g !== 'Insights' && g !== 'Especiais' && g !== 'Equipas' && g !== 'Trocas');
             const selectedGiveCount = data.trades.pending.given.length;
@@ -1245,6 +1257,20 @@
             copyDiv.appendChild(copyDupsBtn);
             copyDiv.appendChild(copyMissingBtn);
             container.appendChild(copyDiv);
+
+            // Toggle Dar / Receber (apenas visível no telemóvel via CSS)
+            const sideToggle = document.createElement('div');
+            sideToggle.className = 'trades-side-toggle';
+            sideToggle.innerHTML = `
+                <button class="trades-side-btn give ${trocasMobileSide==='give'?'active':''}" onclick="setTrocasSide('give')">
+                    ↑ Dar${selectedGiveCount>0?` <span class="trades-side-count">${selectedGiveCount}</span>`:''}
+                </button>
+                <button class="trades-side-btn receive ${trocasMobileSide==='receive'?'active':''}" onclick="setTrocasSide('receive')">
+                    ↓ Receber${selectedReceiveCount>0?` <span class="trades-side-count">${selectedReceiveCount}</span>`:''}
+                </button>
+            `;
+            container.appendChild(sideToggle);
+
             container.appendChild(selectionDiv);
 
             // Populate grids after DOM is ready
@@ -1254,11 +1280,11 @@
             });
 
             // Action bar
-            const actionBar = document.createElement('div');
-            actionBar.className = 'trades-action-bar';
-            actionBar.id = 'trades-action-bar';
-
             const hasSelection = selectedGiveCount > 0 || selectedReceiveCount > 0;
+            const actionBar = document.createElement('div');
+            actionBar.className = 'trades-action-bar' + (hasSelection ? ' trades-action-bar--floating' : '');
+            actionBar.id = 'trades-action-bar';
+            if (hasSelection) container.classList.add('has-floating-bar');
 
             if (!hasSelection) {
                 actionBar.innerHTML = `<span style="color:var(--text-muted);font-size:13px;flex:1">Seleciona cromos nas colunas para criar uma troca.</span>`;
@@ -1307,6 +1333,7 @@
                         saveData();
                         showToast('✓ Troca guardada!');
                         refreshTrocasPanel();
+                        scrollTrocasTop();
                     };
 
                     confirmBtn.onclick = doSave;
@@ -1328,6 +1355,7 @@
                     data.trades.pending = { given: [], received: [] };
                     saveData();
                     refreshTrocasPanel();
+                    scrollTrocasTop();
                 };
 
                 actionBar.appendChild(saveBtn);

@@ -850,6 +850,8 @@
         .trade-item.selected-given {
             background: linear-gradient(145deg, #fef3c7, #fde68a);
             border-color: var(--accent);
+            border-width: 2.5px;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.3);
             color: #78350f;
         }
         .trade-item.selected-given .trade-item-team,
@@ -858,6 +860,8 @@
         .trade-item.selected-received {
             background: linear-gradient(145deg, #ede9fe, #ddd6fe);
             border-color: var(--conta2);
+            border-width: 2.5px;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.3);
             color: #4c1d95;
         }
         .trade-item.selected-received .trade-item-team,
@@ -897,15 +901,16 @@
             position: absolute;
             bottom: 4px;
             right: 4px;
-            width: 17px;
-            height: 17px;
+            width: 21px;
+            height: 21px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 10px;
+            font-size: 12px;
             font-weight: 900;
             color: white;
+            box-shadow: 0 0 0 2px white, var(--shadow-sm);
         }
         .trade-item.selected-given   .trade-sel-mark { background: var(--accent); }
         .trade-item.selected-received .trade-sel-mark { background: var(--conta2); }
@@ -942,6 +947,46 @@
         .trades-action-pill.give    { background: #fef3c7; color: #92400e; border: 1.5px solid var(--accent); }
         .trades-action-pill.receive { background: #ede9fe; color: #4c1d95; border: 1.5px solid var(--conta2); }
         .trades-action-arrow        { color: var(--text-muted); font-size: 16px; }
+
+        /* barra de ação fixa quando há seleção */
+        .trades-action-bar--floating {
+            position: fixed;
+            left: 50%;
+            bottom: 16px;
+            transform: translateX(-50%);
+            width: calc(100% - 32px);
+            max-width: 1232px;
+            margin-bottom: 0;
+            z-index: 900;
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-light);
+        }
+        /* reserva espaço para a barra fixa não tapar o histórico */
+        .has-floating-bar { padding-bottom: 96px; }
+
+        /* toggle Dar / Receber (telemóvel) */
+        .trades-side-toggle { display: none; gap: 6px; margin-bottom: 14px; }
+        .trades-side-btn {
+            flex: 1;
+            justify-content: center;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border);
+            background: var(--surface);
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 700;
+        }
+        .trades-side-btn.give.active    { background: #fef3c7; color: #92400e; border-color: var(--accent); }
+        .trades-side-btn.receive.active { background: #ede9fe; color: #4c1d95; border-color: var(--conta2); }
+        .trades-side-count {
+            display: inline-block;
+            min-width: 18px;
+            padding: 0 6px;
+            border-radius: 999px;
+            background: rgba(0,0,0,0.12);
+            font-size: 12px;
+        }
 
         /* save form inline */
         .trades-save-form {
@@ -1156,6 +1201,12 @@
         @media (max-width: 768px) {
             .trades-container { grid-template-columns: 1fr; }
             .trades-action-bar { flex-direction: column; align-items: stretch; }
+            .trades-action-bar--floating { flex-direction: row; flex-wrap: wrap; }
+
+            /* toggle visível e mostrar apenas um lado de cada vez */
+            .trades-side-toggle { display: flex; }
+            .trades-container.show-give    .trades-section.receive { display: none; }
+            .trades-container.show-receive .trades-section.give    { display: none; }
         }
 
         /* ===== SEARCH ===== */
