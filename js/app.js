@@ -363,7 +363,7 @@
                     const stats = getGroupStats(name);
                     let titleText = name;
                     if (name === 'Especiais') titleText = '⭐ Cromos Especiais';
-                    else if (name === '#ALLTHEFEELS') titleText = '❤️ Cartas #ALLTHEFEELS';
+                    else if (name === '#ALLTHEFEELS') titleText = '❤️ #ALLTHEFEELS';
                     panel.innerHTML = `
                         <div class="panel-header">
                             <div class="panel-title">${titleText}</div>
