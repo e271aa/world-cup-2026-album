@@ -1777,8 +1777,9 @@
         document.getElementById('statsToggleBtn')?.addEventListener('click', () => {
             statsTeamsOnly = !statsTeamsOnly;
             const btn = document.getElementById('statsToggleBtn');
-            btn.textContent = statsTeamsOnly ? 'tudo' : 'só equipas';
-            btn.classList.toggle('active', statsTeamsOnly);
+            btn.classList.toggle('teams-only', statsTeamsOnly);
+            btn.setAttribute('aria-pressed', statsTeamsOnly);
+            btn.title = statsTeamsOnly ? 'A mostrar só equipas — clica para tudo' : 'A mostrar tudo — clica para só equipas';
             updateStats();
         });
 
