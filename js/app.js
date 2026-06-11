@@ -423,10 +423,15 @@
             });
 
             let total = 0, owned = 0;
-            SPECIAL_CROMOS.forEach(c => { total++; if (hasAny(c)) owned++; });
-            ALLTHEFEELS_CROMOS.forEach(c => { total++; if (hasAny(c)) owned++; });
-            TROPHY_TOUR_CROMOS.forEach(c => { total++; if (hasAny(c)) owned++; });
-            Object.values(GROUPS).forEach(group => {
+
+            if (!statsTeamsOnly) {
+                SPECIAL_CROMOS.forEach(c => { total++; if (hasAny(c)) owned++; });
+                ALLTHEFEELS_CROMOS.forEach(c => { total++; if (hasAny(c)) owned++; });
+                TROPHY_TOUR_CROMOS.forEach(c => { total++; if (hasAny(c)) owned++; });
+            }
+
+            Object.entries(GROUPS).forEach(([name, group]) => {
+                if (name === 'Insights' || name === 'Especiais' || name === '#ALLTHEFEELS' || name === 'Trophy Tour' || name === 'Equipas' || name === 'Trocas') return;
                 group.teams.forEach(team => {
                     CROMO_NUMBERS.forEach(n => {
                         total++;
